@@ -1,0 +1,6 @@
+
+
+namespace AOC.Day1
+{
+
+}
