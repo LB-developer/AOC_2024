@@ -4,7 +4,8 @@
     {
         public static void Main()
         {
-            Console.WriteLine(AOC.Day1.Day1Solutions.ProblemOne());
+            Console.WriteLine(AOC.Day1.ProblemOne.Solution());
+            Console.WriteLine(AOC.Day1.ProblemTwo.Solution());
         }
     }
 }

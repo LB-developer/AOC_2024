@@ -2,9 +2,9 @@
 
 namespace AOC.Day1;
 
-public class Day1Solutions
+public class ProblemOne
 {
-    public static int ProblemOne()
+    public static int Solution()
     {
 
         (List<int> listOne, List<int> listTwo) = SortedListsFromInput();
@@ -48,6 +48,48 @@ public class Day1Solutions
         listTwo.Sort();
 
         return Tuple.Create(listOne, listTwo);
+    }
+
+    public static Tuple<List<int>, Dictionary<int, int>> ListAndCountFromInput()
+    {
+        List<int> listOne = new List<int>();
+        Dictionary<int, int> countListTwo = new Dictionary<int, int>();
+
+        using (StreamReader reader = new StreamReader("Day1/input.txt"))
+        {
+            string[]? line;
+
+            while ((line = reader.ReadLine()?.Split("   ")) != null)
+            {
+                var list = 1;
+                foreach (string a in line)
+                {
+                    if (a != "")
+                    {
+                        int currNum = int.Parse(a);
+                        if (list == 1)
+                        {
+                            listOne.Add(currNum);
+                        }
+                        else
+                        {
+                            if (countListTwo.ContainsKey(currNum))
+                            {
+                                countListTwo[currNum]++;
+                            }
+                            else
+                            {
+                                countListTwo[currNum] = 1;
+                            }
+                        }
+
+                        ++list;
+                    }
+                }
+            }
+        }
+
+        return Tuple.Create(listOne, countListTwo);
     }
 
 }
