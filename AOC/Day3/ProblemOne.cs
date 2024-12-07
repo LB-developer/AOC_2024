@@ -40,7 +40,7 @@ public class ProblemOne
                         }
                         else
                         {
-                            throw new FormatException("Couln't convert first number as a string to number");
+                            throw new FormatException("Couldn't convert first number as a string to number");
                         }
 
                         int numTwo;
@@ -50,7 +50,7 @@ public class ProblemOne
                         }
                         else
                         {
-                            throw new FormatException("Couln't convert second number as a string to number");
+                            throw new FormatException("Couldn't convert second number as a string to number");
                         }
 
                         total += numOne * numTwo;
