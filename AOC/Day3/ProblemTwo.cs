@@ -6,12 +6,8 @@ public class ProblemTwo
 {
     public static int total = 0;
 
-    public static int Solution()
+    public int Solution()
     {
-        // 98632444 -- Too High
-        // 8_______ -- Too High
-        // 5_______ -- Too Low
-
 
         using (StreamReader reader = new StreamReader("Day3/input.txt"))
         {
@@ -20,10 +16,13 @@ public class ProblemTwo
             while ((line = reader.ReadLine()) != null)
             {
 
-                RemoveInvalidMulFromLine(line);
-                var muls = extractMul(line);
-                var (numOne, numTwo) = extractNums(muls);
-                total += mulNums(numOne, numTwo);
+                var removed = RemoveInvalidMulFromLine(line);
+                var muls = extractMul(removed);
+                var nums = extractNums(muls);
+                foreach (var (numOne, numTwo) in nums)
+                {
+                    total += mulNums(numOne, numTwo);
+                }
 
             }
         }
@@ -33,14 +32,19 @@ public class ProblemTwo
     }
 
 
-    public static void RemoveInvalidMulFromLine(string line)
+    // good
+    internal string RemoveInvalidMulFromLine(string line)
     {
+        line += "do()";
         string extractValidBoundary = @"don't\(\).*?do\(\)";
         line = Regex.Replace(line, extractValidBoundary, "");
+        return line;
     }
 
-    public static MatchCollection extractMul(string line)
+    // good
+    internal MatchCollection extractMul(string line)
     {
+
         string extractValidArguments = @"mul\(\d+,\d+\)";
 
         Regex argumentsRG = new Regex(extractValidArguments);
@@ -50,47 +54,53 @@ public class ProblemTwo
         return argumentsMatch;
 
     }
-    public static Tuple<int, int> extractNums(MatchCollection matches)
+    internal List<Tuple<int, int>> extractNums(MatchCollection matches)
     {
+        var numbersToMultiply = new List<Tuple<int, int>>();
 
-        string? curr = matches.ToString();
-        string takeNumbersPattern = @"(\d+),\s?(\d+)";
-        Regex takeNumbersRegex = new Regex(takeNumbersPattern);
-
-        if (curr == null)
+        foreach (var match in matches)
         {
-            throw new FormatException("Couldn't convert matches to a string");
-        }
+            string? strMatch = match.ToString();
+            string takeNumbersPattern = @"(\d+),\s?(\d+)";
+            Regex takeNumbersRegex = new Regex(takeNumbersPattern);
 
-        Match numbers = takeNumbersRegex.Match(curr);
-        string numOneString = numbers.Groups[1].Value;
-        string numTwoString = numbers.Groups[2].Value;
+            if (strMatch == null)
+            {
+                throw new FormatException("Couldn't convert matches to a string");
+            }
 
-        int numOne;
-        if (int.TryParse(numOneString, out int numberOne))
-        {
-            numOne = numberOne;
-        }
-        else
-        {
-            throw new FormatException("Couldn't convert first number as a string to number");
-        }
+            Match numbers = takeNumbersRegex.Match(strMatch);
+            string numOneString = numbers.Groups[1].Value;
+            string numTwoString = numbers.Groups[2].Value;
 
-        int numTwo;
-        if (int.TryParse(numTwoString, out int numberTwo))
-        {
-            numTwo = numberTwo;
-        }
-        else
-        {
-            throw new FormatException("Couldn't convert second number as a string to number");
-        }
+            int numOne;
+            if (int.TryParse(numOneString, out int numberOne))
+            {
+                numOne = numberOne;
+            }
+            else
+            {
+                throw new FormatException("Couldn't convert first number as a string to number");
+            }
 
-        return Tuple.Create(numOne, numTwo);
+            int numTwo;
+            if (int.TryParse(numTwoString, out int numberTwo))
+            {
+                numTwo = numberTwo;
+            }
+            else
+            {
+                throw new FormatException("Couldn't convert second number as a string to number");
+            }
+
+            numbersToMultiply.Add(Tuple.Create(numOne, numTwo));
+        }
+        return numbersToMultiply;
     }
 
-    public static int mulNums(int numOne, int numTwo)
+    internal int mulNums(int numOne, int numTwo)
     {
+        Console.WriteLine($"Multiplying {numOne} x {numTwo}");
         return numOne * numTwo;
     }
 }
